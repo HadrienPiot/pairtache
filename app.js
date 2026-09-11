@@ -128,16 +128,22 @@ async function loadSuggestions() {
         const [
             departments,
             chiefs,
-            skills
+            skills,
+            cursus,
+            schoolNames
         ] = await Promise.all([
             apiRequest('/suggestions/chiefs/department'),
             apiRequest('/suggestions/chiefs/name'),
-            apiRequest('/suggestions/skills')
+            apiRequest('/suggestions/skills'),
+            apiRequest('/suggestions/workers/cursus'),
+            apiRequest('/suggestions/workers/school_name')
         ]);
  
         fillDatalist('departmentSuggestions', departments);
         fillDatalist('chiefSuggestions', chiefs);
         fillDatalist('skillsSuggestions', skills);
+        fillDatalist('cursusSuggestions', cursus);
+        fillDatalist('schoolNameSuggestions', schoolNames);
  
         console.log('💡 Suggestions chargées');
     } catch (e) {
@@ -288,6 +294,8 @@ async function addWorker() {
     const name = document.getElementById('workerName').value.trim();
     const department = document.getElementById('workerDepartment').value.trim();
     const workerChief = document.getElementById('workerChief').value.trim();
+    const cursus = document.getElementById('workerCurus').value.trim();
+    const schoolName = document.getElementById('workerSchoolName').value.trim();
     const skillsInput = document.getElementById('workerSkills').value.trim();
     const phoneNumber = document.getElementById('workerTelephone').value.trim();
     const email = document.getElementById('workerEmail').value.trim();
@@ -300,7 +308,7 @@ async function addWorker() {
     const skills = [...new Set(skillsInput.split(',').map(s => s.trim()).filter(Boolean))];
 
     try {
-        await apiRequest('/workers', 'POST', { name, department, workerChief, skills, phoneNumber, email });
+        await apiRequest('/workers', 'POST', { name, department, workerChief, cursus, schoolName, skills, phoneNumber, email });
         await loadAllData();
         await loadSuggestions();
         closeModal('addWorkerModal');
@@ -311,6 +319,8 @@ async function addWorker() {
         document.getElementById('workerName').value = '';
         document.getElementById('workerDepartment').value = '';
         document.getElementById('workerChief').value = '';
+        document.getElementById('workerCurus').value = '';
+        document.getElementById('workerSchoolName').value = '';
         document.getElementById('workerSkills').value = '';
         document.getElementById('workerTelephone').value = '';
         document.getElementById('workerEmail').value = '';
@@ -340,6 +350,8 @@ function openEditWorkerModal(workerId) {
     document.getElementById('editWorkerName').value = worker.name;
     document.getElementById('editWorkerDepartment').value = worker.department;
     document.getElementById('editWorkerChief').value = worker.worker_chief;
+    document.getElementById('editWorkerCurus').value = worker.cursus || '';
+    document.getElementById('editWorkerSchoolName').value = worker.school_name || '';
     document.getElementById('editWorkerSkills').value = worker.skills.join(', ');
     document.getElementById('editWorkerTelephone').value = worker.phone_number || '';
     document.getElementById('editWorkerEmail').value = worker.email || '';
@@ -353,6 +365,8 @@ async function updateWorker() {
     const name = document.getElementById('editWorkerName').value.trim();
     const department = document.getElementById('editWorkerDepartment').value.trim();
     const workerChief = document.getElementById('editWorkerChief').value.trim();
+    const cursus = document.getElementById('editWorkerCurus').value.trim();
+    const schoolName = document.getElementById('editWorkerSchoolName').value.trim();
     const skillsInput = document.getElementById('editWorkerSkills').value.trim();
     const phoneNumber = document.getElementById('editWorkerTelephone').value.trim();
     const email = document.getElementById('editWorkerEmail').value.trim();
@@ -369,6 +383,8 @@ async function updateWorker() {
             name,
             department,
             workerChief,
+            cursus,
+            schoolName,
             skills,
             phoneNumber,
             email
@@ -671,6 +687,7 @@ async function updateChief() {
 function updateFilterOptions() {
     const skills = new Set();
     const departments = new Set();
+    const cursusSet = new Set();
 
     workers.forEach(worker => {
         if (worker.skills && Array.isArray(worker.skills)) {
@@ -679,16 +696,21 @@ function updateFilterOptions() {
         if (worker.department) {
             departments.add(worker.department);
         }
+        if (worker.cursus) {
+            cursusSet.add(worker.cursus);
+        }
     });
 
     console.log('🔍 Filter options updated:', { 
         skills: Array.from(skills), 
         departments: Array.from(departments),
+        cursus: Array.from(cursusSet),
         totalWorkers: workers.length 
     });
 
     const skillFilter = document.getElementById('skillFilter');
     const departmentFilter = document.getElementById('departmentFilter');
+    const cursusFilter = document.getElementById('cursusFilter');
 
     if (skillFilter) {
         skillFilter.innerHTML = '<option value="">Toutes les Compétences</option>';
@@ -703,12 +725,20 @@ function updateFilterOptions() {
             departmentFilter.innerHTML += `<option value="${dept}">${dept}</option>`;
         });
     }
+
+    if (cursusFilter) {
+        cursusFilter.innerHTML = '<option value="">Tous les Cursus</option>';
+        cursusSet.forEach(cursus => {
+            cursusFilter.innerHTML += `<option value="${cursus}">${cursus}</option>`;
+        });
+    }
 }
 
 function filterWorkers() {
     const searchTerm = document.getElementById('searchWorkers').value.toLowerCase();
     const skillFilter = document.getElementById('skillFilter').value;
     const departmentFilter = document.getElementById('departmentFilter').value;
+    const cursusFilter = document.getElementById('cursusFilter').value;
 
     const filterStart = document.getElementById('availabilityStartFilter')?.value;
     const filterEnd = document.getElementById('availabilityEndFilter')?.value;
@@ -724,6 +754,11 @@ function filterWorkers() {
         // 🏢 Département
         const matchesDepartment =
             !departmentFilter || worker.department === departmentFilter;
+
+        // 🎓 Cursus
+        const matchesCursus =
+            !cursusFilter || worker.cursus === cursusFilter;
+
 
         // 📅 Disponibilité par période
         let matchesAvailability = true;
@@ -750,6 +785,7 @@ function filterWorkers() {
             matchesSearch &&
             matchesSkill &&
             matchesDepartment &&
+            matchesCursus &&
             matchesAvailability
         );
     });
@@ -782,6 +818,8 @@ function renderWorkers(workersToRender = workers) {
                     <div>
                         <div class="worker-name">${worker.name}</div>
                         <div style="font-size: 13px; font-style: italic; color: #6b7280; margin-top: 4px;">${worker.department}</div>
+                        <div style="font-size: 13px; color: #6b7280; margin-top: 2px;">${worker.cursus}</div>
+                        <div style="font-size: 13px; color: #6b7280; margin-top: 2px;">${worker.school_name}</div>
                         <div style="font-size: 13px; color: #6b7280; margin-top: 2px;">${worker.phone_number}</div>
                         <div style="font-size: 13px; color: #303641; margin-top: 4px;">${worker.worker_chief}</div>  
                     </div>

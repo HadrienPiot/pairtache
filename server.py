@@ -26,7 +26,7 @@ def health_check():
 @app.route('/api/suggestions/<entity>/<field>', methods=['GET'])
 def get_text_suggestions(entity, field):
     allowed = {
-        "workers": ["department"],
+        "workers": ["cursus", "school_name"],
         "tasks": ["required_department", "priority"],
         "chiefs": ["department","name"]
     }
@@ -108,9 +108,9 @@ def create_worker():
     
     skills_str = ','.join(data.get('skills', []))
     cursor.execute('''
-        INSERT INTO workers (name, department, worker_chief, skills, phone_number, email)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', (data['name'], data.get('department', ''), data.get('workerChief', ''), skills_str, data.get('phoneNumber'), data.get('email', '')))
+        INSERT INTO workers (name, department, worker_chief, cursus, school_name, skills, phone_number, email)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (data['name'], data.get('department', ''), data.get('workerChief', ''), data.get('cursus', ''), data.get('schoolName', ''), skills_str, data.get('phoneNumber'), data.get('email', '')))
     
     worker_id = cursor.lastrowid
     conn.commit()
@@ -137,6 +137,8 @@ def update_worker(worker_id):
             SET name = ?,
                 department = ?,
                 worker_chief = ?,
+                cursus = ?,
+                school_name = ?,
                 skills = ?,
                 phone_number = ?,
                 email = ?
@@ -145,6 +147,8 @@ def update_worker(worker_id):
             data.get('name'),
             data.get('department', ''),
             data.get('workerChief', ''),
+            data.get('cursus', ''),
+            data.get('schoolName', ''),
             skills_str,
             data.get('phoneNumber'),
             data.get('email', ''),

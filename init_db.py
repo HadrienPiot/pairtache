@@ -15,6 +15,8 @@ def init_db():
             name TEXT NOT NULL,
             department TEXT,
             worker_chief TEXT,
+            cursus TEXT,
+            school_name TEXT,
             skills TEXT,
             phone_number TEXT,
             email TEXT,

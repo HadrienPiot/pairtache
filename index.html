@@ -98,6 +98,11 @@
             color: #0b5821;
         }
 
+        .btn-annulation{
+            background: #e3e4e3;
+            color: #000000;
+        }
+
         .btn-secondary:hover {
             background: #bef7ce;
         }
@@ -636,6 +641,12 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label>Filtrer Par Cursus</label>
+                                <select id="cursusFilter" onchange="filterWorkers()">
+                                    <option value="">Tous les Cursus</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>Date de début souhaitée</label>
                                 <input type="date" id="availabilityStartFilter" onchange="filterWorkers()">
                             </div>
@@ -712,6 +723,16 @@
                 <datalist id="chiefSuggestions"></datalist>
             </div>
             <div class="form-group">
+                <label>Cursus scolaire</label>
+                <input type="text" id="workerCurus" list="cursusSuggestions" placeholder="ex., Licence, Master, Doctorat...">
+                <datalist id="cursusSuggestions"></datalist>
+            </div>
+            <div class="form-group">
+                <label>Nom École</label>
+                <input type="text" id="workerSchoolName" list="schoolNameSuggestions" placeholder="ex., Université de Caen, INSA Rouen...">
+                <datalist id="schoolNameSuggestions"></datalist>
+            </div>
+            <div class="form-group">
                 <label>Compétences (virgule pour séparer)</label>
                 <input type="text" id="workerSkills" list="skillsSuggestions" placeholder="ex., PowerPoint, Récolte, Traitement,...">
                 <datalist id="skillsSuggestions"></datalist>
@@ -751,6 +772,16 @@
                 <input id="editWorkerChief" list="chiefSuggestions">
                 <datalist id="chiefSuggestions"></datalist>
             </div>
+             <div class="form-group">
+                <label>Cursus scolaire</label>
+                <input id="editWorkerCurus" list="cursusSuggestions">
+                <datalist id="cursusSuggestions"></datalist>
+            </div>
+            <div class="form-group">
+                <label>Nom École</label>
+                <input id="editWorkerSchoolName" list="schoolNameSuggestions">
+                <datalist id="schoolNameSuggestions"></datalist>
+            </div>
             <div class="form-group">
                 <label>Compétences (virgule pour séparer)</label>
                 <input id="editWorkerSkills">
@@ -764,7 +795,7 @@
                 <input id="editWorkerEmail">
             </div>
             <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="updateWorker()">Enregistrer</button>
-            <button style="width: 100%;margin-top: 10px; " onclick="closeModal('editWorkerModal')">Annuler</button>
+            <button class="btn btn-annulation" style="width: 100%;margin-top: 10px; " onclick="closeModal('editWorkerModal')">Annuler</button>
         </div>
      </div>
 
@@ -884,7 +915,7 @@
                 <input id="editChiefEmail">
             </div>
             <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="updateChief()">Enregistrer</button>
-            <button style="width: 100%;margin-top: 10px; " onclick="closeModal('editChiefModal')">Annuler</button>
+            <button class="btn btn-annulation" style="width: 100%;margin-top: 10px; " onclick="closeModal('editChiefModal')">Annuler</button>
         </div>
     </div>
 

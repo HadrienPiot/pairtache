@@ -37,7 +37,7 @@ pip install -r requirements.txt
 ## TO DO
 - [x] Finish the translation of the entire application. I did it in english.
 - [ ] Unit tests.
-- [ ] Add a filter by availability (init_day -> last_day) and remove the filter by availability status.
+- [x] Add a filter by availability (init_day -> last_day) and remove the filter by availability status.
 - [x] Add a phone number feature in the database and to the GET query in the back-end.
 - [x] Change the matching algorithm (so rustic at date).
 - [x] Decide if the complexity is enough at the current state... (More robust DB, a framework for the front ?)
