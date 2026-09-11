@@ -1,6 +1,6 @@
 import sqlite3
 from omegaconf import OmegaConf
-cfg = OmegaConf.load("config.yaml")
+cfg = OmegaConf.load('/home/juagudelo/HOMEdev/pairtache/config.yaml')
 
 # Database initialization
 def init_db():

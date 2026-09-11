@@ -4,8 +4,9 @@ from datetime import datetime
 from init_db import init_db
 from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
+from waitress import serve
 
-cfg = OmegaConf.load("config.yaml")
+cfg = OmegaConf.load("/home/juagudelo/HOMEdev/pairtache/config.yaml")
 
 app = Flask(__name__, static_folder='.')
 CORS(app)
@@ -570,11 +571,11 @@ if __name__ == '__main__':
     print("🚀 WorkForce Scheduler API Server")
     print("=" * 50)
     print(f"📁 Database: {cfg.db.path}")
-    print(f"🌐 Server: http://localhost:5000")
-    print(f"📊 API Docs: http://localhost:5000/api/health")
+    # print(f"🌐 Server: http://localhost:5000")
+    # print(f"📊 API Docs: http://localhost:5000/api/health")
     print("=" * 50)
     
     # Run the Flask app
     # app.run(host='127.0.0.1', port=8020, debug=False)
-    app.run(host='0.0.0.0', port=8050, debug=True)
+    serve(app, host='0.0.0.0', port=8050, threads=10)
     # app.run(debug=False)

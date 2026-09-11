@@ -176,17 +176,15 @@ function showLoginType(type) {
 function loginAdmin() {
     const username = document.getElementById('adminUsername').value;
     const password = document.getElementById('adminPassword').value;
-    // TODO : following block must be activate for deployment
-    // if (username === 'admin' && password === 'admin123') {
-    //     currentUser = { username };
-    //     currentUserType = 'admin';
-    //     showMainApp();
-    // } else {
-    //     alert('Invalid credentials!');
-    // }
+    if (username === 'admin' && password === 'agrial!tache!2026') {
+        currentUser = { username };
+        currentUserType = 'admin';
+        showMainApp();
+    } else {
+        alert('Invalid credentials!');
+    }
     currentUser = { username };
     currentUserType = 'admin';
-    showMainApp()
 }
 
 async function loginChief() {
